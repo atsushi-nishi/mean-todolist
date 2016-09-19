@@ -9,7 +9,10 @@
 //module.exports = router;
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/mean-todolist');
+//mongoose.connect('mongodb://localhost/mean-todolist');
+mongoose.connect('mongodb://root:root@ds033096.mlab.com:33096/mean-todolist');
+
+
 
 var Schema = mongoose.Schema;
 
