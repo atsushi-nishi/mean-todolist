@@ -45,20 +45,27 @@ var UserSchema = new mongoose.Schema({
 });
 var User = db.model("User", UserSchema);
 
-
 // passportでのセッション設定
 // シリアライズの設定をしないと、user.passwordでパスワードがポロリする可能性があるので、必要な項目だけ持たせる
 passport.serializeUser(function(user, done){
+    console.log("passport serializeUser");
+    console.dir(user.email);
+    console.dir(user._id);
     done(null, {email: user.email, _id: user._id});
+    console.log("passport serializeUser done");
 });
 passport.deserializeUser(function(serializedUser, done){
+    console.log("passport deserializeUser");
     User.findById(serializedUser._id, function(err, user){
+        console.log("passport deserializeUser1");
+        console.dir(user.email);
+        console.dir(user._id);
         done(err, user);
     });
 });
 
 
-// LOcalStrategyを使う設定
+// LocalStrategyを使う設定
 passport.use(new LocalStrategy(
   // フォームの名前をオプションとして渡す。
   // 今回はusernameの代わりにemailを使っているので、指定が必要
@@ -66,42 +73,17 @@ passport.use(new LocalStrategy(
   function(email, password, done){
     // 非同期で処理させるといいらしいです
     process.nextTick(function(){
-        console.log('passport log 0');
-        User.find({}, function(err, docs){
-          console.log('passport log 0-1');
-
-          for (var i=0, size=docs.length; i<size; ++i) {
-            console.log("docs.name is %s", docs[i].name);
-          }
-        });
-
-        console.log("email %s", email);
-
-//        User.findOne({email: email}, function(err, user){
-        User.findOne({}, function(err, user){
-            console.log('passport log 1');
-            console.log('err: %s', err);
-            console.log('user: %d', user);
-            console.dir(user);
-            console.log('found name:', user.name);
-            console.log('found email:', user.email);
+        User.findOne({email: email}, function(err, user){
             if(err) {
-                console.log('passport log 2');
                 return done(err);
             }
-            console.log('passport log 2-1');
             if(!user) {
-                console.log('passport log 3');
-                return done(null, false, {message: "ユーザーが見つかりませんでした。"});
+                return done(null, false, {message: "User not found!"});
             }
-            console.log('passport log 3-1');
             var hashedPassword = getHash(password);
-            console.log('passport log 4');
             if(user.password !== hashedPassword) {
-                console.log('passport log 5');
-                return done(null, false, {message: "パスワードが間違っています。"});
+                return done(null, false, {message: "Password incorrect!"});
             }
-            console.log('passport log 6');
             return done(null, user);
         });
     });
@@ -109,9 +91,17 @@ passport.use(new LocalStrategy(
 
 // リクエストがあったとき、ログイン済みかどうか確認する関数
 var isLogined = function(req, res, next){
-    if(req.isAuthenticated())
+    console.log("isLogined req: ");
+    //console.dir(req);
+    console.log("isLogined0");
+    //console.dir(req);
+    console.dir(req.isAuthenticated());
+    if(req.isAuthenticated()) {
+        console.log("isLogined1");
         return next();  // ログイン済み
+    }
     // ログインしてなかったらログイン画面に飛ばす
+    console.log("isLogined2");
     res.redirect("/login");
 };
 
@@ -156,27 +146,22 @@ app.get("/login", function(req, res){
     res.render("login", {user: req.user, message: req.flash("error")});
 });
 app.post("/login", 
-    passport.authenticate("local", {successRedirect: '/', failureRedirect: '/login', failureFlash: true}),
+    passport.authenticate("local", {failureRedirect: '/login', failureFlash: true}),
     function(req, res){
         // ログインに成功したらトップへリダイレクト
         console.log('login post2');
         res.redirect("/");
-    });
+});
 
+/*
 app.get("/logout", function(req, res){
     req.logout();
     res.redirect("/");
 });
-app.get("/member_only", isLogined, function(req, res){
-    res.render("member_only", {user: req.user});
-});
+*/
 
 
-
-
-
-
-app.get('/users', function(req, res) {
+app.get('/users', isLogined, function(req, res) {
   res.render('users/index'); // load the single view file (angular will handle the page changes on the front-end)
 });
 
@@ -188,33 +173,6 @@ app.delete('/users/:id', users.destroy);
 
 app.get('/api/users', users.api_users);
 
-/*
-// passport
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    debug("Authenticating ",username,",",password);
-    if ((username === "sa") && (password == "nopassword")) {
-      var user = {
-        username : "ted",
-        firstName : "Ted",
-        lastName : "Neward",
-        id : 1
-      };
-      return done(null, user);
-    }
-    else {
-      return done(null, false, { message: "DENIED"} );
-    }
-  }
-));
-
-app.post('/login',
-  console.log("login post");
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login1111',
-                                   failureFlash: true })
-);
-*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
