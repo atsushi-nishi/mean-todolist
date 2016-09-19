@@ -26,38 +26,44 @@ db.once('open', function() {
     console.log("we're connected!");
 });
 
+var User = mongoose.model('User');
+
 module.exports = {
     index : function (req, res) {
         var users = {};
-        // TODO: findByAll 実装する
-        var User = mongoose.model('User');
 
-        console.log('User');
-        
         User.find({}, function(err, docs) {
-            console.log("docs.length is %d", docs.length);
+
+            if (err) console.log("err: %s", err);
+            console.log("This is callback function. docs.length is %d", docs.length);
 
             for (var i=0, size=docs.length; i<size; ++i) {
                   users[i] = docs[i].name;
                   console.log("docs.name is %s", docs[i].name);
-                  console.log("users");
-                  console.dir(users);
             }
-            console.log("end for");
-            console.log("users");
             console.dir(users);
             res.send(users);
         });
+
+        console.log("Not callback function");
     },
 
     show : function (req, res) {
         var user = {};
-        // TODO: findById 実装する
-        res.send(user);
+
+        console.log("req.params");
+        console.dir(req.params);
+
+        User.findOne({id: req.params.id}, function(err, docs) {
+
+            console.log("docs.name is %s", docs.name);
+            console.dir(docs);
+            user = docs;
+            res.send(user);
+        });
     },
     create : function (req, res) {
         var user = {};
-        // TODO: insert 実装する
         res.send(user);
     },
     update : function (req, res) {
