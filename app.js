@@ -24,7 +24,10 @@ app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
+
+//app.use(app.router);
+//routes.initialize(app);
 
 app.get('/users', users.index);
 app.get('/users/:id', users.show);
