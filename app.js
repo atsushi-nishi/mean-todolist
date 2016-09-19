@@ -16,9 +16,9 @@ var users = require('./routes/users');
 var crypto = require("crypto");
 var secretKey = "some_random_secret";   // シークレットは適当に変えてください
 var getHash = function(target){
-        var sha = crypto.createHmac("sha256", secretKey);
-            sha.update(target);
-                return sha.digest("hex");
+      var sha = crypto.createHmac("sha256", secretKey);
+      sha.update(target);
+      return sha.digest("hex");
 };
 
 // passportで必要なもの
@@ -130,7 +130,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(session({secret: "another_random_sevret_again"}));
+app.use(session({
+  secret: "another_random_sevret_again",
+  saveUninitialized: true,
+  resave: true,
+}));
 
 app.use('/', routes);
 //app.use('/login', login)
