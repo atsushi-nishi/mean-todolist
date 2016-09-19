@@ -29,11 +29,18 @@ app.use('/', routes);
 //app.use(app.router);
 //routes.initialize(app);
 
-app.get('/users', users.index);
+
+app.get('/users', function(req, res) {
+  res.render('users/index'); // load the single view file (angular will handle the page changes on the front-end)
+});
+
+//app.get('/users', users.index);
 app.get('/users/:id', users.show);
 app.post('/users', users.create);
 app.put('/users/:id', users.update);
 app.delete('/users/:id', users.destroy);
+
+app.get('/api/users', users.api_users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

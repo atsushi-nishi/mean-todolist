@@ -9,10 +9,7 @@
 //module.exports = router;
 
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://localhost/mean-todolist');
 mongoose.connect('mongodb://root:root@ds033096.mlab.com:33096/mean-todolist');
-
-
 
 var Schema = mongoose.Schema;
 
@@ -45,7 +42,7 @@ module.exports = {
                   console.log("docs.name is %s", docs[i].name);
             }
             console.dir(users);
-            res.send(users);
+            res.render('users/index', { users: users });
         });
 
         console.log("Not callback function");
@@ -79,4 +76,12 @@ module.exports = {
         // TODO: delete 実装する
         res.send(user);
     },
+
+    api_users : function (req, res) {
+       User.find({}, function(err, docs) {
+            if (err) console.log("err: %s", err);
+            res.json(docs);
+        });
+    },
+
 };
