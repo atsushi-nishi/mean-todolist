@@ -5,20 +5,23 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var todoSchema = new Schema({
-    id: Number,
-    category: String,
-    title:  String,
-    detail: String,
-    dute_date: Date
+    category: {type: String, required: true},
+    title:  {type: String, required: true},
+    status:  {type: Number, required: true},
+    detail: {type: String, required: true},
+    dueDate: {type: Date, required: true},
+    createDate: {type: Date, required: true},
 });
 
 mongoose.model('todo', todoSchema);
 
+/*
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log("we're connected!");
 });
+*/
 
 var Todo = mongoose.model('todo');
 
@@ -27,7 +30,7 @@ module.exports = {
         Todo.find({}, function(err, docs) {
         if (err) console.log("err: %s", err);
             res.json(docs);
-        });
+        }).sort({createDate:-1});;
     },
 
     show : function (req, res) {
@@ -40,14 +43,19 @@ module.exports = {
         });
     },
     create : function (req, res) {
+        console.log("===== req.body : ====");
+        console.dir(req.body);
         var todo = new Todo;
-        todo.category = "anytihng";
-        todo.title = "This is title";
-        todo.detail = "This is detail";
-        todo.due_date = "2099-07-31";
+        todo.category = req.body.todoCategory;
+        todo.title = req.body.todoTitle;
+        todo.detail = req.body.todoDetail;
+        todo.status = 0;
+        todo.dueDate = req.body.todoDueDate;
+        todo.createDate = Date.now();
         todo.save(function(err) {
           if (err) { console.log(err); }
         });
+        res.redirect("/todos");
     },
     update : function (req, res) {
         var todo = {};

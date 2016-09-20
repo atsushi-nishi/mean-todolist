@@ -20,28 +20,80 @@
             <p>Action! and Reaction!!</p>
         </div>
 
-<form class="form-inline" method="POST" action="/api/todos">
+<div class="panel panel-primary">
+<div class="panel-heading">
+  <h3 class="panel-title">Add new todo!</h3>
+</div>
+<div class="panel-body">
+<form method="POST" action="/api/todos">
   <div class="form-group">
-    <label for="inputCategory">Category</label>
-    <input type="text" class="form-control" id="inputCategory" name="category" placeholder="">
+    <label for="inputTitle">Title</label>
+    <input type="text" class="form-control" id="inputTitle" name="todoTitle" aria-describedby="emailHelp" required placeholder="Go supermarket">
+    <small id="textlHelp" class="form-text text-muted">simple and fun!</small>
   </div>
   <div class="form-group">
-    <label for="inputTitle">Category</label>
-    <input type="text" class="form-control" id="inputTitle" name="title" placeholder="New title">
+    <label for="inputTextarea">Detail</label>
+    <textarea class="form-control" id="inputTextarea" name="todoDetail" rows="3" required></textarea>
   </div>
-   <button type="submit" class="btn btn-primary">Save</button>
+  <div class="form-group">
+    <label for="selectCategory">choose Category</label>
+    <select class="form-control" id="selectCategory" name="todoCategory">
+      <option value=0>Work</option>
+      <option value=1>Private</option>
+      <option value=2>Others</option>
+    </select>
+  </div>
+
+<label for="inputeDueDate">Due Date</label>
+<div class="container">
+    <div class="row">
+        <div class='col-sm-6'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" name="todoDueDate" value="2099-12-31" required>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+        </script>
+    </div>
+</div>
+
+
+
+
+
+
+  <button type="submit" class="btn btn-primary">Save</button>
 </form>
+</div>
+</div>
+
 
 
         <table class="table">
           <tr>
-            <th>#</th><th>Title</th><th>Detail</th><th>Due Date</th>
+           <th>id</th><th>Category</th><th>Title</th><th>Status</th><th>Detail</th><th>Due Date</th><th>Create Date</th>
           </tr>
           <tr ng-repeat="todo in todos">
-            <td>{{todo.aaaa}}</td>
-            <td>Woo!</td>
-            <td>Oh!</td>
-            <td>Yes!</td>
+            <td>{{todo._id}}</td>
+            <td>{{todo.category}}</td>
+            <td>{{todo.title}}</td>
+            <td>{{todo.status}}</td>
+            <td>{{todo.detail}}</td>
+            <td>{{todo.dueDate | date:'yyyy-MM-dd'}}</td>
+            <td>{{todo.createDate | date:'yyyy-MM-dd'}}</td>
+            <td>
+              <form action="/todos/1" method="PUT">
+                <button type="submit">Done</button>
+              </form>
+            </td>
           </tr>
         </table>
 
