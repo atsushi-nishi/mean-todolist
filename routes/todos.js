@@ -58,7 +58,7 @@ module.exports = {
         res.redirect("/todos");
     },
     update : function (req, res) {
-        var id = req.body.data._id;
+        var id = req.params.id;
         var todo = req.body.data;
 
         console.log("id")
@@ -74,9 +74,17 @@ module.exports = {
         });
     },
     destroy : function (req, res) {
-        var todo = {};
-        // TODO: delete 実装する
-        res.send(todo);
+
+        console.dir(req.params);
+        var id = req.params.id;
+        console.log("delete: %s", id);
+        Todo.findByIdAndRemove(id, function(err, doc) {
+            if (err) {
+                console.log("err: %s", err);
+            }
+            console.log("delete doc: %s", doc);
+            res.send(doc);
+        });
     },
 
 
