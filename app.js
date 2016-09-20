@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var todos = require('./routes/todos');
 
 
 //================================================
@@ -75,7 +76,7 @@ passport.use(new LocalStrategy(
     process.nextTick(function(){
         User.findOne({email: email}, function(err, user){
             if(err) {
-                return done(err);
+                return done(err, false, {message: err});
             }
             if(!user) {
                 return done(null, false, {message: "User not found!"});
@@ -92,7 +93,7 @@ passport.use(new LocalStrategy(
 // リクエストがあったとき、ログイン済みかどうか確認する関数
 var isLogined = function(req, res, next){
     console.log("isLogined req: ");
-    //console.dir(req);
+    console.dir(req);
     console.log("isLogined0");
     //console.dir(req);
     console.dir(req.isAuthenticated());
@@ -101,8 +102,10 @@ var isLogined = function(req, res, next){
         return next();  // ログイン済み
     }
     // ログインしてなかったらログイン画面に飛ばす
-    console.log("isLogined2");
+    console.log("[WARN]isLogined false!!!!");
     res.redirect("/login");
+    //はまったので一回コメントアウト
+    //ToDo
 };
 
 //================================================
@@ -165,6 +168,8 @@ app.get("/logout", function(req, res){
 */
 
 
+
+// ---- Users Start ----
 app.get('/users', isLogined, function(req, res) {
   res.render('users/index'); // load the single view file (angular will handle the page changes on the front-end)
 });
@@ -176,6 +181,22 @@ app.put('/users/:id', users.update);
 app.delete('/users/:id', users.destroy);
 
 app.get('/api/users', users.api_users);
+// ---- Users End ----
+
+
+// ---- ToDos Start ----
+//app.get('/todos', isLogined, function(req, res) {
+app.get('/todos', function(req, res) {
+  res.render('todos');
+});
+
+// ToDo APIsL
+app.get('/api/todos', todos.index);
+app.get('/api/todos/:id', todos.show);
+app.post('/api/todos', todos.create);
+app.put('/api/todos/:id', todos.update);
+app.delete('/api/todos/:id', todos.destroy);
+// ---- ToDos End ----
 
 
 // catch 404 and forward to error handler

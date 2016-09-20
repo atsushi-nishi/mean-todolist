@@ -20,6 +20,7 @@ myModule.controller('mainCtrl', [
 
     $scope.formData = {};
 
+/*
     $scope.createUser = function() {
         $http.post('/api/users', $scope.formData)
             .success(function(data) {
@@ -31,8 +32,41 @@ myModule.controller('mainCtrl', [
                 console.log('Error: ' + data);
             });
     };
+*/
 
 }]);
+
+myModule.controller('todoCtrl', [
+  '$scope',
+  '$http',
+  function($scope, $http){
+
+    // when landing on the page, get all todos and show them
+    $http.get('/api/todos')
+        .success(function(data) {
+            $scope.todos = data;
+            console.log(data);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
+
+    $scope.formData = {};
+
+    $scope.createTodo = function() {
+        $http.post('/api/todos', $scope.formData)
+            .success(function(data) {
+                $scope.formData = {}; // clear the form so our user is ready to enter another
+                $scope.todos = data;
+                console.log(data);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+}]);
+
 
 function mainController($scope, $http) {
     $scope.formData = {};

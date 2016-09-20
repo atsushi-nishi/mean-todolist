@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myModule">
+<head>
+    <% include ./partials/head %>
+</head>
+<body class="container" ng-controller="todoCtrl">
+    <header>
+        <% include ./partials/header %>
+    </header>
+
+
+    <main>
+      {{test}}
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+        <script src="javascripts/core.js"></script>
+
+        <div class="jumbotron">
+            <h1>ToDos</h1>
+            <p>Action! and Reaction!!</p>
+        </div>
+
+<form class="form-inline" method="POST" action="/api/todos">
+  <div class="form-group">
+    <label for="inputCategory">Category</label>
+    <input type="text" class="form-control" id="inputCategory" name="category" placeholder="">
+  </div>
+  <div class="form-group">
+    <label for="inputTitle">Category</label>
+    <input type="text" class="form-control" id="inputTitle" name="title" placeholder="New title">
+  </div>
+   <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+
+        <table class="table">
+          <tr>
+            <th>#</th><th>Title</th><th>Detail</th><th>Due Date</th>
+          </tr>
+          <tr ng-repeat="todo in todos">
+            <td>{{todo.aaaa}}</td>
+            <td>Woo!</td>
+            <td>Oh!</td>
+            <td>Yes!</td>
+          </tr>
+        </table>
+
+    </main>
+
+    <footer>
+        <% include ./partials/footer %>
+    </footer>
+    
+</body>
+</html>
+
+
+
+
+
