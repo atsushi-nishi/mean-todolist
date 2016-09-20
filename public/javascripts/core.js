@@ -67,15 +67,40 @@ myModule.controller('todoCtrl', [
 
     $scope.updateDone = function($todo) {
       
-      console.log("updateDone");
-      console.log($todo);
-      var _todo = angular.copy($todo);
-      console.log("updateDone2");
-      console.log(_todo);
-      _todo.status = 1;
-      console.log(_todo);
-      $http.put('/api/todos/' + $todo._id, {data: _todo});
-    }
+        console.log("updateDone");
+        console.log($todo);
+        var _todo = {_id: $todo._id, status: 1};
+        console.log("updateDone2");
+        console.log(_todo);
+        _todo.status = 1;
+        console.log(_todo);
+        $http.put('/api/todos/' + $todo._id, {data: _todo})
+            .success(function(data) {
+                console.log('--- put callback---');
+                console.dir(data);
+                $todo.status = 1;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.updateUndone = function($todo) {
+      
+        console.log("updateUndone");
+        console.log($todo);
+        var _todo = {_id: $todo._id, status: 0};
+
+        $http.put('/api/todos/' + $todo._id, {data: _todo})
+            .success(function(data) {
+                console.log('--- put callback---');
+                console.dir(data);
+                $todo.status = 0;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
 
 }]);
 

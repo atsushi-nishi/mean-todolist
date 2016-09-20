@@ -38,7 +38,7 @@
   <div class="form-group">
     <label for="selectCategory">choose Category</label>
     <select class="form-control" id="selectCategory" name="todoCategory">
-      <option value=0>Work</option>
+      <option value=0 selected="selected">Work</option>
       <option value=1>Private</option>
       <option value=2>Others</option>
     </select>
@@ -95,9 +95,16 @@
             <td>{{todo.dueDate | date:'yyyy-MM-dd'}}</td>
             <td>{{todo.createDate | date:'yyyy-MM-dd'}}</td>
             <td>
-              <form ng-submit="updateDone(todo)">
-                <button type="submit" value="submit">Done</button>
-              </form>
+              <span ng-show="todo.status==0">
+                <form ng-submit="updateDone(todo)">
+                  <button type="submit" value="submit">Done</button>
+                </form>
+              </span>
+              <span ng-show="todo.status==1">
+                <form ng-submit="updateUndone(todo)">
+                  <button type="submit" value="submit">Undone</button>
+                </form>
+              </span>
             </td>
           </tr>
         </table>

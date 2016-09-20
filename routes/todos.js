@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var todoSchema = new Schema({
-    category: {type: String, required: true},
+    category: {type: Number, required: true},
     title:  {type: String, required: true},
     status:  {type: Number, required: true},
     detail: {type: String, required: true},
@@ -58,22 +58,20 @@ module.exports = {
         res.redirect("/todos");
     },
     update : function (req, res) {
-        var todo = {};
         var id = req.body.data._id;
+        var todo = req.body.data;
 
-        var todo = {category: req.body.todoCategory,
-                    title: req.body.todoTitle,
-                    detail: req.body.todoDetail,
-                    status: req.body.data.status,
-                    dueDate: req.body.todoDueDate,
-                    }
+        console.log("id")
+        console.dir(id)
+        console.log("todo")
+        console.dir(todo)
 
         Todo.findByIdAndUpdate(id, todo, function(err, doc) {
-          if (err) {
-            console.log("err: %s", err);
-          }
+            if (err) {
+                console.log("err: %s", err);
+            }
+            res.send(doc);
         });
-        res.get("/todos");
     },
     destroy : function (req, res) {
         var todo = {};
