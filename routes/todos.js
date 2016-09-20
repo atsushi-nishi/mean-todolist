@@ -59,8 +59,21 @@ module.exports = {
     },
     update : function (req, res) {
         var todo = {};
-        // TODO: update 実装する
-        res.send(todo);
+        var id = req.body.data._id;
+
+        var todo = {category: req.body.todoCategory,
+                    title: req.body.todoTitle,
+                    detail: req.body.todoDetail,
+                    status: req.body.data.status,
+                    dueDate: req.body.todoDueDate,
+                    }
+
+        Todo.findByIdAndUpdate(id, todo, function(err, doc) {
+          if (err) {
+            console.log("err: %s", err);
+          }
+        });
+        res.get("/todos");
     },
     destroy : function (req, res) {
         var todo = {};

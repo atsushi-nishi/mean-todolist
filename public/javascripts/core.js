@@ -65,6 +65,18 @@ myModule.controller('todoCtrl', [
             });
     };
 
+    $scope.updateDone = function($todo) {
+      
+      console.log("updateDone");
+      console.log($todo);
+      var _todo = angular.copy($todo);
+      console.log("updateDone2");
+      console.log(_todo);
+      _todo.status = 1;
+      console.log(_todo);
+      $http.put('/api/todos/' + $todo._id, {data: _todo});
+    }
+
 }]);
 
 

@@ -28,7 +28,7 @@
 <form method="POST" action="/api/todos">
   <div class="form-group">
     <label for="inputTitle">Title</label>
-    <input type="text" class="form-control" id="inputTitle" name="todoTitle" aria-describedby="emailHelp" required placeholder="Go supermarket">
+    <input type="text" class="form-control" id="inputTitle" name="todoTitle" aria-describedby="emailHelp" required placeholder="Go supermarket" />
     <small id="textlHelp" class="form-text text-muted">simple and fun!</small>
   </div>
   <div class="form-group">
@@ -83,15 +83,20 @@
           </tr>
           <tr ng-repeat="todo in todos">
             <td>{{todo._id}}</td>
-            <td>{{todo.category}}</td>
+            <td>
+              <span ng-if="todo.category==0">Work</span>
+              <span ng-if="todo.category==1">Private</span>
+              <span ng-if="todo.category==2">Others</span>
+            </td>
+
             <td>{{todo.title}}</td>
             <td>{{todo.status}}</td>
             <td>{{todo.detail}}</td>
             <td>{{todo.dueDate | date:'yyyy-MM-dd'}}</td>
             <td>{{todo.createDate | date:'yyyy-MM-dd'}}</td>
             <td>
-              <form action="/todos/1" method="PUT">
-                <button type="submit">Done</button>
+              <form ng-submit="updateDone(todo)">
+                <button type="submit" value="submit">Done</button>
               </form>
             </td>
           </tr>
