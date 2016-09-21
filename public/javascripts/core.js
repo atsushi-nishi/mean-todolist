@@ -4,6 +4,7 @@ var myModule = angular.module('myModule', []);
 myModule.controller('mainCtrl', [
   '$scope',
   '$http',
+  '$window',
   function($scope, $http){
     $scope.test = 'Hello world!';
     console.log($scope.test);
@@ -25,7 +26,8 @@ myModule.controller('mainCtrl', [
 myModule.controller('signupCtrl', [
   '$scope',
   '$http',
-  function($scope, $http){
+  '$window',
+  function($scope, $http, $window){
 
     console.log("==== signupCtrl called -====");
 
@@ -75,7 +77,9 @@ myModule.controller('signupCtrl', [
         console.dir(data);
         $http.post('/api/users', data)
             .success(function(data) {
+                console.log("[success]signup.register success");
                 console.dir(data);
+                $window.location.href = "/";
             })
             .error(function(data) {
                 console.log('Error: ' + data);

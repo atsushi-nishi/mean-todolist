@@ -1,6 +1,8 @@
 //var express = require('express');
 //var router = express.Router();
 
+//var passport= require('passport');
+
 /* GET users listing. */
 //router.get('/', function(req, res, next) {
 //  res.send('respond with a resource');
@@ -33,6 +35,30 @@ var getHash = function(target){
 
 module.exports = {
     User : User,
+
+/*
+    signup : function (req, res) {
+        res.render("signup", {user: req.user, message: req.flash("error")});
+    },
+
+    signout : function (req, res) {
+        req.logout();
+        res.redirect("/");
+    },
+
+    signin : function (req, res) {
+        res.render("signin", {user: req.user, message: req.flash("error")});
+    },
+
+    doSignin : function (req, res) {
+        passport.authenticate("local", {failureRedirect: '/signin', failureFlash: true}),
+        function(req, res){
+            // ログインに成功したらトップへリダイレクト
+            console.log('signin succeed');
+            res.redirect("/");
+        }
+    },
+*/
 
     index : function (req, res) {
         var users = {};
@@ -77,10 +103,12 @@ module.exports = {
         user.lastName = req.body.lastName;
         user.email = req.body.email;
         user.password= getHash(req.body.password);
+        console.log("[info]user.create save");
         user.save(function(err) {
           if (err) { console.log(err); }
+          console.log("[success]user.create done");
+          res.send(user);
         });
-        res.send(user);
     },
     update : function (req, res) {
         var user = {};
@@ -120,7 +148,25 @@ module.exports = {
     },
 
     getHashedPassword : function(req, res) { 
-       res.send(getHash(req));
+        console.log("[func]user.getHashedPassword");
+        return getHash(req);
+    },
+
+    isSignined : function (req, res, next){
+        console.log("[func]user.isSignined");
+        console.log("isSignined req: ");
+        console.dir(req);
+        console.log("isSignined0");
+        console.dir(req.isAuthenticated());
+        if(req.isAuthenticated()) {
+            console.log("isSignined1");
+            return next();  // ログイン済み
+        }
+        // ログインしてなかったらログイン画面に飛ばす
+        console.log("[WARN]isSignined false!!!!");
+        res.redirect("/signin");
+        //はまったので一回コメントアウト
+        //ToDo
     },
 
 };
