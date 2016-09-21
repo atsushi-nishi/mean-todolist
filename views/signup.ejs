@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myModule">
+  <head>
+    <title>Sign Up</title>
+    <% include ./partials/head %>
+  </head>
+
+<body class="container" ng-controller="signupCtrl">
+
+<main>
+  <div class="jumbotron">
+    <h1>Sign Up</h1>
+
+    <h3 style="color:red">
+      <% if (message) { %>
+        <%= message %><br>
+      <% } %>
+    </h3>
+  </div>
+
+
+<div class="panel panel-primary">
+<div class="panel-heading">
+  <h3 class="panel-title">Add new todo!</h3>
+</div>
+<div class="panel-body">
+<form ng-submit="register()">
+  <div class="form-group">
+    <label for="inputFirstName">First Name</label>
+    <input type="text" class="form-control" id="inputFirstName" name="firstName" aria-describedby="" required placeholder="Michael" value="testFName"/>
+    <small id="textlHelp" class="form-text text-muted">simple and fun!</small>
+  </div>
+  <div class="form-group">
+    <label for="inputLastName">Last Name</label>
+    <input type="text" class="form-control" id="inputLastName" name="lastName" aria-describedby="" required placeholder="Jackson" value="testLName"/>
+  </div>
+  <div class="form-group">
+    <label for="inputEmail">Email</label>
+    <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="" required placeholder="user@example.com" value="user@example.com"/>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword">Password</label>
+    <input type="password" class="form-control" id="inputPassword" name="password" aria-describedby="" required placeholder="" value="abcd1234"/>
+  </div>
+
+  <button type="submit" value="submit" class="btn btn-primary">Sign Up</button>
+</form>
+</div>
+</div>
+
+
+</main>
+
+<footer>
+  <% include ./partials/footer %>
+</footer>
+    
+</body>
+</html>

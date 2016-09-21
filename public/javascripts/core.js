@@ -20,21 +20,43 @@ myModule.controller('mainCtrl', [
 
     $scope.formData = {};
 
-/*
-    $scope.createUser = function() {
-        $http.post('/api/users', $scope.formData)
+}]);
+
+myModule.controller('signupCtrl', [
+  '$scope',
+  '$http',
+  function($scope, $http){
+
+    console.log("==== signupCtrl called -====");
+
+    $scope.checkEmailRegistered = function($email) {
+        console.log("[func]signup.checkEmailRegistered");
+        $http.get('/api/users/email/' + $email)
             .success(function(data) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.todos = data;
-                console.log(data);
+                console.dir(data);
+                $todo.status = 1;
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
     };
-*/
+
+    $scope.register = function($data) {
+        console.log("[func]signup.register");
+        $http.post('/api/users', $data)
+            .success(function(data) {
+                console.dir(data);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
 
 }]);
+
+    
+
 
 myModule.controller('todoCtrl', [
   '$scope',

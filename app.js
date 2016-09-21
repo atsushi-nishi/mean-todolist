@@ -5,14 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var todos = require('./routes/todos');
+
+
 
 
 //================================================
 
 
+/*
 // ハッシュ値を求めるために必要なもの
 var crypto = require("crypto");
 var secretKey = "some_random_secret";   // シークレットは適当に変えてください
@@ -21,6 +21,7 @@ var getHash = function(target){
       sha.update(target);
       return sha.digest("hex");
 };
+*/
 
 // passportで必要なもの
 var flash = require("connect-flash")
@@ -29,22 +30,13 @@ var flash = require("connect-flash")
 
 var session = require('express-session');
 
-// MongoDBを使うのに必要なもの
-var mongoose = require("mongoose");
+var init = require('./routes/init');
+var routes = require('./routes/index');
+var users = require('./routes/users');
+var todos = require('./routes/todos');
 
-// ユーザーのモデルを作成
-var db = mongoose.createConnection("mongodb://root:root@ds033096.mlab.com:33096/mean-todolist", function(error, res){
-  if (error) console.log(error);
-});
-
-console.log("hash is %s", getHash("aaa"));
-
-var UserSchema = new mongoose.Schema({
-    name: {type: String, required: true},
-    email: {type: String, required: true},
-    password: {type: String, requird: true}
-});
-var User = db.model("User", UserSchema);
+// 一時的に User を外でも使えるように．．．
+var User = users.User;
 
 // passportでのセッション設定
 // シリアライズの設定をしないと、user.passwordでパスワードがポロリする可能性があるので、必要な項目だけ持たせる
@@ -81,7 +73,8 @@ passport.use(new LocalStrategy(
             if(!user) {
                 return done(null, false, {message: "User not found!"});
             }
-            var hashedPassword = getHash(password);
+            //var hashedPassword = getHash(password);
+            var hashedPassword = user.getHashedPassword(password);
             if(user.password !== hashedPassword) {
                 return done(null, false, {message: "Password incorrect!"});
             }
@@ -146,6 +139,9 @@ app.use('/', routes);
 //routes.initialize(app);
 
 
+app.get("/signup", function(req, res){
+    res.render("signup", {user: req.user, message: req.flash("error")});
+});
 
 
 
@@ -181,6 +177,9 @@ app.put('/users/:id', users.update);
 app.delete('/users/:id', users.destroy);
 
 app.get('/api/users', users.api_users);
+app.get('/api/users/email/:email', users.showByEmail);
+app.post('/api/users', users.create);
+
 // ---- Users End ----
 
 

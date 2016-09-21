@@ -9,26 +9,31 @@
 //module.exports = router;
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://root:root@ds033096.mlab.com:33096/mean-todolist');
+//mongoose.connect('mongodb://root:root@ds033096.mlab.com:33096/mean-todolist');
 
-var Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
-    id: Number,
-    name:  String,
+var UserSchema = new mongoose.Schema({
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
+    email: {type: String, required: true},
+    password: {type: String, requird: true}
 });
+var User = mongoose.model("User", UserSchema);
 
-mongoose.model('User', UserSchema);
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    console.log("we're connected!");
-});
+var crypto = require("crypto");
+var secretKey = "OrangeGrapeNamatamago";   // シークレットは適当に変えてください
 
-var User = mongoose.model('User');
+var getHash = function(target){
+      var sha = crypto.createHmac("sha256", secretKey);
+      sha.update(target);
+      return sha.digest("hex");
+};
+
 
 module.exports = {
+    User : User,
+
     index : function (req, res) {
         var users = {};
 
@@ -38,8 +43,8 @@ module.exports = {
             console.log("This is callback function. docs.length is %d", docs.length);
 
             for (var i=0, size=docs.length; i<size; ++i) {
-                  users[i] = docs[i].name;
-                  console.log("docs.name is %s", docs[i].name);
+                  users[i] = docs[i].firstName;
+                  console.log("docs.name is %s", docs[i].firstName);
             }
             console.dir(users);
             res.render('users/index', { users: users });
@@ -54,16 +59,24 @@ module.exports = {
         console.log("req.params");
         console.dir(req.params);
 
-        User.findOne({id: req.params.id}, function(err, docs) {
-
-            console.log("docs.name is %s", docs.name);
-            console.dir(docs);
-            user = docs;
+        User.findOne({id: req.params.id}, function(err, doc) {
+            console.log("doc.name is %s", doc.name);
+            console.dir(doc);
+            user = doc;
             res.send(user);
         });
     },
+
     create : function (req, res) {
-        var user = {};
+        console.log("[func]user.create");
+        var user = new User;
+        user.firstName = req.body.data.firstName;
+        user.lastName = req.body.data.lastName;
+        user.email = req.body.data.email;
+        user.password= getHash(req.body.data.password);
+        user.save(function(err) {
+          if (err) { console.log(err); }
+        });
         res.send(user);
     },
     update : function (req, res) {
@@ -82,6 +95,19 @@ module.exports = {
             if (err) console.log("err: %s", err);
             res.json(docs);
         });
+    },
+
+    showByEmail : function (req, res) {
+        User.findOne({email: req.params.email}, function(err, doc) {
+            console.log("doc.firstName by email is %s", doc.fristName);
+            console.dir(doc);
+            user = doc;
+            res.send(user);
+        });
+    },
+
+    getHashedPassword : function(req, res) { 
+       res.send(getHash(req));
     },
 
 };
