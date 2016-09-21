@@ -8,6 +8,9 @@
 <body class="container" ng-controller="signupCtrl">
 
 <main>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+  <script src="javascripts/core.js"></script>
+
   <div class="jumbotron">
     <h1>Sign Up</h1>
 
@@ -21,34 +24,33 @@
 
 <div class="panel panel-primary">
 <div class="panel-heading">
-  <h3 class="panel-title">Add new todo!</h3>
+  <h3 class="panel-title">Input your information!</h3>
 </div>
 <div class="panel-body">
 <form ng-submit="register()">
   <div class="form-group">
     <label for="inputFirstName">First Name</label>
-    <input type="text" class="form-control" id="inputFirstName" name="firstName" aria-describedby="" required placeholder="Michael" value="testFName"/>
-    <small id="textlHelp" class="form-text text-muted">simple and fun!</small>
+    <input type="text" class="form-control" id="inputFirstName" ng-model="signupData.firstName" name="firstName" aria-describedby="" required placeholder="Michael"/>
   </div>
   <div class="form-group">
     <label for="inputLastName">Last Name</label>
-    <input type="text" class="form-control" id="inputLastName" name="lastName" aria-describedby="" required placeholder="Jackson" value="testLName"/>
+    <input type="text" class="form-control" id="inputLastName" ng-model="signupData.lastName" name="lastName" aria-describedby="" required placeholder="Jackson"/>
   </div>
   <div class="form-group">
     <label for="inputEmail">Email</label>
-    <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="" required placeholder="user@example.com" value="user@example.com"/>
+    <input type="email" class="form-control" id="inputEmail" ng-model="signupData.email" ng-blur="checkEmailRegistered()" name="email" aria-describedby="" required placeholder="user@example.com"/>
+    <small id="textlHelp" class="form-text text-muted">{{signupMessage.email}}</small>
   </div>
   <div class="form-group">
     <label for="inputPassword">Password</label>
-    <input type="password" class="form-control" id="inputPassword" name="password" aria-describedby="" required placeholder="" value="abcd1234"/>
+    <input type="password" class="form-control" id="inputPassword" ng-model="signupData.password" name="password" aria-describedby="" required placeholder=""/>
   </div>
 
   <button type="submit" value="submit" class="btn btn-primary">Sign Up</button>
 </form>
 </div>
 </div>
-
-
+ 
 </main>
 
 <footer>

@@ -29,21 +29,51 @@ myModule.controller('signupCtrl', [
 
     console.log("==== signupCtrl called -====");
 
-    $scope.checkEmailRegistered = function($email) {
+    $scope.signupData = {firstName: "sampleFName",
+                          lastName: "sampleLName",
+                          email: "user@example.com",
+                          password: "samplePassword",
+    };
+
+    $scope.signupMessage = {email: "----"};
+
+    $scope.checkEmailRegistered = function() {
         console.log("[func]signup.checkEmailRegistered");
-        $http.get('/api/users/email/' + $email)
+        email = $scope.signupData.email;
+        $http.get('/api/users/email/' + email)
             .success(function(data) {
+                console.dir("data");
                 console.dir(data);
-                $todo.status = 1;
+                console.dir("email");
+                console.dir(email);
+                if (data && data.email === email) {
+                  $scope.signupMessage.email = "This email address is already registerd!";
+                } else {
+                  $scope.signupMessage.email = "Welcome!!";
+                }
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
     };
 
-    $scope.register = function($data) {
+    $scope.register = function() {
+
+/*
+        var data = {firstName: $scope.signupData.firstName,
+                    lastName: $scope.signupData.lastName,
+                    email: $scope.signupData.email,
+                    password: $scope.signupData.password,
+        }
+*/
+        data = $scope.signupData;
+
         console.log("[func]signup.register");
-        $http.post('/api/users', $data)
+        console.log("$scope.signupData");
+        console.dir($scope.signupData);
+        console.log("data");
+        console.dir(data);
+        $http.post('/api/users', data)
             .success(function(data) {
                 console.dir(data);
             })

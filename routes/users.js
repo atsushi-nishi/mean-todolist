@@ -69,11 +69,14 @@ module.exports = {
 
     create : function (req, res) {
         console.log("[func]user.create");
+        console.dir(req.body.data);
+        console.log("req.body");
+        console.dir(req.body);
         var user = new User;
-        user.firstName = req.body.data.firstName;
-        user.lastName = req.body.data.lastName;
-        user.email = req.body.data.email;
-        user.password= getHash(req.body.data.password);
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.email = req.body.email;
+        user.password= getHash(req.body.password);
         user.save(function(err) {
           if (err) { console.log(err); }
         });
@@ -98,11 +101,21 @@ module.exports = {
     },
 
     showByEmail : function (req, res) {
+        console.log("[func]user.showByEmail");
+        console.log("req.params")
+        console.log(req.params)
+
         User.findOne({email: req.params.email}, function(err, doc) {
-            console.log("doc.firstName by email is %s", doc.fristName);
-            console.dir(doc);
-            user = doc;
-            res.send(user);
+
+            console.log("doc");
+            console.log(doc);
+            if (doc) {
+                console.log("doc.firstName by email is %s", doc.firstName);
+                console.log(doc);
+            } else {
+                console.log("user not found");
+            }
+            res.send(doc);
         });
     },
 
