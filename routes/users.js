@@ -157,6 +157,10 @@ module.exports = {
         console.log("isSignined req: ");
         console.dir(req);
         console.log("isSignined0");
+        console.log("req.user");
+        console.dir(req.user);
+        //console.log("req.sessions[0].passport.user");
+        //console.dir(req.sessions[0].passport.user);
         console.dir(req.isAuthenticated());
         if(req.isAuthenticated()) {
             console.log("isSignined1");
@@ -164,7 +168,8 @@ module.exports = {
         }
         // ログインしてなかったらログイン画面に飛ばす
         console.log("[WARN]isSignined false!!!!");
-        res.redirect("/signin");
+        //res.redirect("/signin");
+        res.redirect("/login");
         //はまったので一回コメントアウト
         //ToDo
     },

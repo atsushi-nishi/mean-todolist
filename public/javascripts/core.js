@@ -97,15 +97,52 @@ myModule.controller('todoCtrl', [
   '$http',
   function($scope, $http){
 
-    // when landing on the page, get all todos and show them
-    $http.get('/api/todos')
-        .success(function(data) {
-            $scope.todos = data;
-            console.log(data);
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
-        });
+    $scope.todos = {};
+    $scope.displayStatus = 0; //all
+
+    $sortColumn = 'createDate';
+    $sortRule = -1; //desc
+
+
+    angular.element(document).ready(function () {
+        document.getElementById('example').DataTable();
+    });
+
+    $scope.show = function(sort) {
+        $http.get('/api/todos')
+            .success(function(data) {
+
+                newData = [];
+                console.log("display1");
+                if ($scope.displayStatus == 99) {  
+                    console.log("display2");
+                    //$scope.todos = data;
+                    newData = data;
+                } else {
+                    console.log("display3");
+                    data.forEach( function(_todo, i) {
+                        if (_todo.status != $scope.displayStatus) {
+                            data.splice(i, 1);
+                        } else {
+                          newData.push(_todo);
+                        }
+                        //$scope.todos = newData;
+                    });
+                    console.log("display4");
+                }
+                $scope.todos = newData;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.refresh = function() {
+      $scope.toods = {};
+      $scope.show();
+    };
+
+    $scope.refresh();
 
     $scope.formData = {};
 
@@ -172,7 +209,19 @@ myModule.controller('todoCtrl', [
             .error(function(data) {
                 console.log('Error: ' + data);
             });
+
+        $scope.refresh();
     };
+
+    $scope.$watch('displayStatus', function(newValue, oldValue, scope) {
+        console.log("displayStatus is changed!");
+        $scope.refresh();
+    });
+
+    $scope.$watch('sortColumn', function(newValue, oldValue, scope) {
+        console.log("sortColumn is changed!");
+        $scope.refresh();
+    });
 
 }]);
 

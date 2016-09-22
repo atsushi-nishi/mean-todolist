@@ -1,5 +1,7 @@
+
 var express = require('express');
 var path = require('path');
+
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -12,7 +14,6 @@ var bodyParser = require('body-parser');
 //================================================
 
 
-/*
 // ハッシュ値を求めるために必要なもの
 var crypto = require("crypto");
 var secretKey = "some_random_secret";   // シークレットは適当に変えてください
@@ -21,14 +22,11 @@ var getHash = function(target){
       sha.update(target);
       return sha.digest("hex");
 };
-*/
 
 // passportで必要なもの
-/*
 var flash = require("connect-flash")
   , passport = require("passport")
   , LocalStrategy = require("passport-local").Strategy;
-*/
 
 var flash = require("connect-flash");
 
@@ -41,7 +39,7 @@ var users = require('./routes/users');
 var todos = require('./routes/todos');
 
 
-rPassport.useLocalStrategy();
+//rPassport.useLocalStrategy();
 
 //var passport = rPassport.passport;
 
@@ -54,7 +52,6 @@ console.dir(passport);
 // 一時的に User を外でも使えるように．．．
 var User = users.User;
 
-/*
 // passportでのセッション設定
 // シリアライズの設定をしないと、user.passwordでパスワードがポロリする可能性があるので、必要な項目だけ持たせる
 passport.serializeUser(function(user, done){
@@ -65,6 +62,12 @@ passport.serializeUser(function(user, done){
     console.log("passport serializeUser done");
 });
 passport.deserializeUser(function(serializedUser, done){
+
+    console.log("passport deserializeUser1");
+    done(err, user);
+    console.log("passport deserializeUser2");
+
+/*
     console.log("passport deserializeUser");
     User.findById(serializedUser._id, function(err, user){
         console.log("passport deserializeUser1");
@@ -72,12 +75,11 @@ passport.deserializeUser(function(serializedUser, done){
         console.dir(user._id);
         done(err, user);
     });
-});
 */
+});
 
 rPassport.configSerializer();
 
-/*
 // LocalStrategyを使う設定
 passport.use(new LocalStrategy(
   // フォームの名前をオプションとして渡す。
@@ -87,31 +89,36 @@ passport.use(new LocalStrategy(
     // 非同期で処理させるといいらしいです
     process.nextTick(function(){
         User.findOne({email: email}, function(err, user){
+            console.log('email');
+            console.log(email);
             if(err) {
                 return done(err, false, {message: err});
             }
+            console.log('test log 1');
             if(!user) {
+                console.log('test log 2');
                 return done(null, false, {message: "User not found!"});
             }
             //var hashedPassword = getHash(password);
+            console.log('test log 3');
             var hashedPassword = users.getHashedPassword(password);
             console.log("hashed password : %s", hashedPassword);
             if(user.password !== hashedPassword) {
+                console.log('test log 4');
                 return done(null, false, {message: "Password incorrect!"});
             }
+            console.log('test log 5');
             return done(null, user);
         });
     });
 }));
-*/
 
-/*
 // リクエストがあったとき、ログイン済みかどうか確認する関数
 var isLogined = function(req, res, next){
-    console.log("isLogined req: ");
+    console.log("[func]isLogined");
+    console.dir("[inspect]req");
     console.dir(req);
-    console.log("isLogined0");
-    //console.dir(req);
+    console.log("req.isAuthenticated() is ");
     console.dir(req.isAuthenticated());
     if(req.isAuthenticated()) {
         console.log("isLogined1");
@@ -123,7 +130,6 @@ var isLogined = function(req, res, next){
     //はまったので一回コメントアウト
     //ToDo
 };
-*/
 
 //================================================
 
@@ -148,9 +154,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //passport
 // app.router を使う前にpassportの設定が必要です
 
-rPassport.start(app);
+//rPassport.start(app);
 
-/*
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -159,7 +164,6 @@ app.use(session({
   saveUninitialized: true,
   resave: true,
 }));
-*/
 
 
 
@@ -168,13 +172,11 @@ app.use(session({
 
 
 app.use('/', routes);
-//app.use('/login', login)
 
 //app.use(app.router);
 //routes.initialize(app);
 
 
-/*
 app.get("/signup", function(req, res){
     res.render("signup", {user: req.user, message: req.flash("error")});
 });
@@ -195,7 +197,6 @@ app.post("/login",
         console.log('login post2');
         res.redirect("/");
 });
-*/
 
 /*
 app.get("/logout", function(req, res){
@@ -203,10 +204,12 @@ app.get("/logout", function(req, res){
     res.redirect("/");
 });
 */
+/*
 app.get("/signup", rPassport.signup);
 app.get("/signout", rPassport.signout);
 app.get("/signin", rPassport.signin);
 app.post("/signin", rPassport.doSignin);
+*/
 
 
 

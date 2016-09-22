@@ -27,10 +27,13 @@ var Todo = mongoose.model('todo');
 
 module.exports = {
     index : function (req, res) {
+
         Todo.find({}, function(err, docs) {
         if (err) console.log("err: %s", err);
             res.json(docs);
-        }).sort({createDate:-1});;
+        //}).sort({createDate:-1});;
+        });
+
     },
 
     show : function (req, res) {
