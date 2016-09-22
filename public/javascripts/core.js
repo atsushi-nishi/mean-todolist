@@ -1,4 +1,6 @@
 // public/core.js
+//var myModule = angular.module('myModule', ['ui.bootstrap.datetimepicker']);
+//var myModule = angular.module('myModule', ['datatables']);
 var myModule = angular.module('myModule', []);
 
 myModule.controller('mainCtrl', [
@@ -104,10 +106,11 @@ myModule.controller('todoCtrl', [
     $sortRule = -1; //desc
 
 
+/*
     angular.element(document).ready(function () {
         document.getElementById('example').DataTable();
     });
-
+*/
     $scope.show = function(sort) {
         $http.get('/api/todos')
             .success(function(data) {
