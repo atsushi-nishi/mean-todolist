@@ -39,9 +39,16 @@ myModule.controller('signupCtrl', [
                           password: "samplePassword",
     };
 
-    $scope.userUserAgent = 'init value';
-    $scope.userDevice = 'init device';
-    $scope.userMobile = 'init mobile';
+    $scope.userUserAgent = 'ua not found';
+    $scope.userDevice = 'device not found';
+    $scope.userMobile = '';
+
+    var patternRecords = [ "patternA", "patternB" ] ;
+
+    $scope.signupPagePattern = patternRecords[ Math.floor( Math.random() * patternRecords.length ) ] ;
+    console.log("[inspect]signupPagePattern");
+    console.log($scope.signupPagePattern);
+
 
     $scope.signupMessage = {email: "----"};
 
@@ -78,14 +85,29 @@ myModule.controller('signupCtrl', [
 
         console.log("[func]signup.register");
         console.log("$scope.signupData");
+        console.dir(data);
+        //data.userUserAgent = $scope.userUserAgent.toJson;
+        data.userUserAgent = 'user agent is converted to device';
+        data.userDevice= $scope.userDevice + $scope.userMobile;
+        //data.signupPagePattern = 'default page';
+        data.signupPagePattern = $scope.signupPagePattern;
         console.dir($scope.signupData);
         console.log("data");
-        console.dir(data);
+
         $http.post('/api/users', data)
             .success(function(data) {
                 console.log("[success]signup.register success");
                 console.dir(data);
-                $window.location.href = "/";
+                console.log("$scope.userDevice + $scope.userMobile", $scope.userDevice + $scope.userMobile);
+              
+                mixpanel.track(
+                    "[submit]]signup",
+                    {"device": userDeviceMobile,
+                      "signupPagePattern" : $scope.signupPagePattern,
+                    }
+                );
+               // $window.location.href = "/";
+
             })
             .error(function(data) {
                 console.log('Error: ' + data);
@@ -127,7 +149,7 @@ myModule.controller('signupCtrl', [
         $scope.userUserAgent = _ua;
 
         // デバイス検出
-        var searchDevice = (function(ua){
+        var searchDevice = function(ua){
           if(ua.Mobile[0]){
             return Object.keys(ua)[0]
           }else if(ua.Tablet){
@@ -135,14 +157,14 @@ myModule.controller('signupCtrl', [
           }else{
             return Object.keys(ua)[2];
           }
-        })(_ua);
+        };
         //var device = document.getElementById('device');
         //device.innerHTML = searchDevice;
-        $scope.userDevice = searchDevice;
+        $scope.userDevice = searchDevice(_ua);
 
         // モバイル検出
         if(_ua.Mobile[0]){
-          var searchMobile = (function(ua){
+          var searchMobile = function(ua){
             var st = '(';
             var ed = ')';
             for(var j = 1; j < Object.keys(ua.Mobile).length; j++){
@@ -152,19 +174,26 @@ myModule.controller('signupCtrl', [
               }
             }
             return st + Object.keys(ua.Mobile).slice(1, (Object.keys(ua.Mobile).length)-1) + '以外' + ed;
-          })(_ua);
+          };
           //var mobile = document.getElementById('mobile');
           //mobile.innerHTML = searchMobile;
-          $scope.userMobile= searchMobile;
+          $scope.userMobile = searchMobile(_ua);
           console.log("$scope.userDevice = searchMobile;");
           console.log(searchMobile);
 
-          $scope.userMobile = "searchMobile";
 
         }
     };
 
     $scope.getUserAgent();
+    var userDeviceMobile  = $scope.userDevice + $scope.userMobile;
+
+    mixpanel.track(
+        "[page]signup",
+        {"device": userDeviceMobile,
+          "signupPagePattern" : $scope.signupPagePattern,
+        }
+    );
 
 
 
@@ -190,11 +219,6 @@ myModule.controller('todoCtrl', [
 
     $sortColumn = 'createDate';
     $sortRule = -1; //desc
-
-    mixpanel.track(
-        "Played song",
-        {"genre": "hip-hop"}
-    );
 
 
 /*

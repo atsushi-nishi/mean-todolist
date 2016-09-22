@@ -21,7 +21,7 @@
 
         <table class="table">
           <tr>
-            <th>ID</th><th>firstName</th><th>lastName</th><th>email</th><th>device</th><th>ua</th><th>signupPagePattern</th>
+            <th>ID</th><th>firstName</th><th>lastName</th><th>email</th><th>device</th><th>signupPagePattern</th>
           </tr>
           <tr ng-repeat="user in users">
             <td>{{user._id}}</td>
@@ -29,7 +29,6 @@
             <td>{{user.lastName}}</td>
             <td>{{user.email}}</td>
             <td>{{user.device}}</td>
-            <td>{{user.userAgent}}</td>
             <td>{{user.signupPagePattern}}</td>
           </tr>
         </table>
