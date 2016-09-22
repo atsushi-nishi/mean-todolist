@@ -120,7 +120,8 @@ var isLogined = function(req, res, next){
     console.dir(req);
     console.log("req.isAuthenticated() is ");
     console.dir(req.isAuthenticated());
-    if(req.isAuthenticated()) {
+    //if(req.isAuthenticated()) {
+    if (1) {
         console.log("isLogined1");
         return next();  // ログイン済み
     }
@@ -214,7 +215,8 @@ app.post("/signin", rPassport.doSignin);
 
 
 // ---- Users Start ----
-app.get('/users', users.isSignined, function(req, res) {
+//app.get('/users', users.isSignined, function(req, res) {
+app.get('/users', function(req, res) {
   res.render('users/index'); // load the single view file (angular will handle the page changes on the front-end)
 });
 

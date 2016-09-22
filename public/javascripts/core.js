@@ -105,6 +105,11 @@ myModule.controller('todoCtrl', [
     $sortColumn = 'createDate';
     $sortRule = -1; //desc
 
+    mixpanel.track(
+        "Played song",
+        {"genre": "hip-hop"}
+    );
+
 
 /*
     angular.element(document).ready(function () {

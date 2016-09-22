@@ -18,7 +18,10 @@ var UserSchema = new mongoose.Schema({
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     email: {type: String, required: true},
-    password: {type: String, requird: true}
+    password: {type: String, requird: true},
+    device: {type: String, requird: true},
+    ua: {type: String, requird: true},
+    signupPagePattern: {type: String, requird: true},
 });
 var User = mongoose.model("User", UserSchema);
 
@@ -103,6 +106,9 @@ module.exports = {
         user.lastName = req.body.lastName;
         user.email = req.body.email;
         user.password= getHash(req.body.password);
+        user.device = getHash(req.body.ua);
+        user.userAgent = getHash(req.body.userAgent);
+        user.signupPagePattern = getHash(req.body.signupPagePattern);
         console.log("[info]user.create save");
         user.save(function(err) {
           if (err) { console.log(err); }
