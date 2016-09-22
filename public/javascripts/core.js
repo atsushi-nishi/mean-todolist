@@ -106,7 +106,7 @@ myModule.controller('signupCtrl', [
                       "signupPagePattern" : $scope.signupPagePattern,
                     }
                 );
-               // $window.location.href = "/";
+                $window.location.href = "/";
 
             })
             .error(function(data) {
