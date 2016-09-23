@@ -33,11 +33,7 @@ myModule.controller('signupCtrl', [
 
     console.log("==== signupCtrl called -====");
 
-    $scope.signupData = {firstName: "sampleFName",
-                          lastName: "sampleLName",
-                          email: "user@example.com",
-                          password: "",
-    };
+    $scope.signupData = {};
 
     $scope.passwordIncorrect = 0;
     $scope.passwordCorrect = 0;
@@ -119,13 +115,6 @@ myModule.controller('signupCtrl', [
  
     $scope.register = function() {
 
-/*
-        var data = {firstName: $scope.signupData.firstName,
-                    lastName: $scope.signupData.lastName,
-                    email: $scope.signupData.email,
-                    password: $scope.signupData.password,
-        }
-*/
         data = $scope.signupData;
 
         console.log("[func]signup.register");
@@ -227,6 +216,19 @@ myModule.controller('signupCtrl', [
 
         }
     };
+
+
+    $scope.fillinSampleData = function () {
+        console.log("[func]signup.fillinSampleData");
+        $scope.signupData.firstName = "SampleFirstName";
+        $scope.signupData.lastName = "sampleLastName";
+        $scope.signupData.email= "user@example.com";
+        $scope.signupData.password = "Abcdef0123"; 
+
+        $scope.checkPasswordCorrect();
+        $scope.displayPasswordMessage();
+
+    }
 
     $scope.getUserAgent();
     var userDeviceMobile  = $scope.userDevice + $scope.userMobile;
@@ -383,6 +385,10 @@ myModule.controller('todoCtrl', [
         console.log("sortColumn is changed!");
         $scope.refresh();
     });
+
+
+
+
 
 }]);
 

@@ -55,32 +55,44 @@ pagePattern : {{signupPagePattern}}
 <div class="panel-body">
 <form ng-submit="register()">
   <div class="form-group">
+  <!--
     <label for="inputFirstName">First Name</label>
-    <input type="text" class="form-control" id="inputFirstName" ng-model="signupData.firstName" name="firstName" aria-describedby="" required placeholder="Michael"/>
+  -->
+    <input type="text" class="form-control" id="inputFirstName" ng-model="signupData.firstName" name="firstName" aria-describedby="" required placeholder="First Name"/>
   </div>
   <div class="form-group">
+  <!--
     <label for="inputLastName">Last Name</label>
-    <input type="text" class="form-control" id="inputLastName" ng-model="signupData.lastName" name="lastName" aria-describedby="" required placeholder="Jackson"/>
+  -->
+    <input type="text" class="form-control" id="inputLastName" ng-model="signupData.lastName" name="lastName" aria-describedby="" required placeholder="Fast Name"/>
   </div>
   <div class="form-group">
+  <!--
     <label for="inputEmail">Email</label>
-    <input type="email" class="form-control" id="inputEmail" ng-model="signupData.email" ng-blur="checkEmailRegistered()" name="email" aria-describedby="" required placeholder="user@example.com"/>
+  -->
+    <input type="email" class="form-control" id="inputEmail" ng-model="signupData.email" ng-blur="checkEmailRegistered()" name="email" aria-describedby="" required placeholder="Email address"/>
     <small id="textlHelp" class="form-text text-muted">{{signupMessage.email}}</small>
   </div>
   <div class="form-group">
+  <!--
     <label for="inputPassword">Password</label>
-    <input type="password" class="form-control" id="inputPassword" ng-model="signupData.password" ng-change="checkPasswordCorrect()" ng-blur="displayPasswordMessage()" name="password" aria-describedby="" required placeholder=""/>
+  -->
+    <input type="password" class="form-control" id="inputPassword" ng-model="signupData.password" ng-change="checkPasswordCorrect()" ng-blur="displayPasswordMessage()" name="password" aria-describedby="" required placeholder="Password(at least 8 characters inc. 1 upper case)"/>
     <small id="currentPassword" class="form-text text-muted">current : {{signupData.password}}</small><br />
     <span ng-show="passwordIncorrect">
       <small id="textPasswordMessage" class="form-text text-muted">{{passwordIncorrectMessage}}</small>
     </span>
   </div>
   <div class="form-group">
+  <!--
     <label for="inputUserAgent">UserAgent</label>
+  -->
     <input type="text" class="form-control" id="inputUserAgent" name="userUserAgent" aria-describedby="" required placeholder="" disabled value={{userUserAgent}} />
   </div>
   <div class="form-group">
+  <!--
     <label for="inputUserAgent">UserDevice</label>
+  -->
     <input type="text" class="form-control" id="inputUserDevice" name="userDevice" aria-describedby="" required placeholder="" disabled value={{userDevice}}{{userMobile}} />
   </div>
 
@@ -88,6 +100,10 @@ pagePattern : {{signupPagePattern}}
 </form>
 </div>
 </div>
+
+<sapn>
+  <button class="btn btn-secondary" ng-click="fillinSampleData()">Fillin SampleData</button>
+</sapn>
  
 </main>
 
