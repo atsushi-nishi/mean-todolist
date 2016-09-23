@@ -32,6 +32,9 @@ pagePattern : {{signupPagePattern}}
       <% if (message) { %>
         <%= message %><br>
       <% } %>
+      <span ng-show"passwordErrorMessage">
+        {{passwordErrorMessage}}<br>
+      </span>
     </h3>
 
 <div ng-show="signupPagePattern=='patternA'">
@@ -66,7 +69,11 @@ pagePattern : {{signupPagePattern}}
   </div>
   <div class="form-group">
     <label for="inputPassword">Password</label>
-    <input type="password" class="form-control" id="inputPassword" ng-model="signupData.password" name="password" aria-describedby="" required placeholder=""/>
+    <input type="password" class="form-control" id="inputPassword" ng-model="signupData.password" ng-change="checkPasswordCorrect()" ng-blur="displayPasswordMessage()" name="password" aria-describedby="" required placeholder=""/>
+    <small id="currentPassword" class="form-text text-muted">current : {{signupData.password}}</small><br />
+    <span ng-show="passwordIncorrect">
+      <small id="textPasswordMessage" class="form-text text-muted">{{passwordIncorrectMessage}}</small>
+    </span>
   </div>
   <div class="form-group">
     <label for="inputUserAgent">UserAgent</label>

@@ -36,14 +36,17 @@ myModule.controller('signupCtrl', [
     $scope.signupData = {firstName: "sampleFName",
                           lastName: "sampleLName",
                           email: "user@example.com",
-                          password: "samplePassword",
+                          password: "",
     };
 
+    $scope.passwordIncorrect = 0;
+    $scope.passwordCorrect = 0;
+    $scope.passwordIncorrectMessage = '';
     $scope.userUserAgent = 'ua not found';
     $scope.userDevice = 'device not found';
     $scope.userMobile = '';
 
-    var patternRecords = [ "patternA", "patternB" ] ;
+    var patternRecords = [ "patternA", "patternB" ];
 
     $scope.signupPagePattern = patternRecords[ Math.floor( Math.random() * patternRecords.length ) ] ;
     console.log("[inspect]signupPagePattern");
@@ -54,7 +57,7 @@ myModule.controller('signupCtrl', [
 
     $scope.checkEmailRegistered = function() {
         console.log("[func]signup.checkEmailRegistered");
-        email = $scope.signupData.email;
+        var email = $scope.signupData.email;
         $http.get('/api/users/email/' + email)
             .success(function(data) {
                 console.dir("data");
@@ -71,7 +74,49 @@ myModule.controller('signupCtrl', [
                 console.log('Error: ' + data);
             });
     };
+    
+    $scope.checkPasswordCorrect = function() {
+        console.log("[func]signup.checkPasswordCorrect");
+        var password = $scope.signupData.password;
 
+        re = /[0-9]/;
+        if(!re.test(password)) {
+          $scope.passwordIncorrectMessage = "Error: password must contain at least one number (0-9)!";
+          console.log("[info]signup.checkPasswordCorrect 1");
+          $scope.passwordIncorrect = 1;
+          return false;
+        }
+        re = /[a-z]/;
+        if(!re.test(password)) {
+          $scope.passwordIncorrectMessage = "Error: password must contain at least one lowercase letter (a-z)!";
+          console.log("[info]signup.checkPasswordCorrect 2");
+          $scope.passwordIncorrect = 1;
+          return false;
+        }
+        re = /[A-Z]/;
+        if(!re.test(password)) {
+          $scope.passwordIncorrectMessage = "Error: password must contain at least one uppercase letter (A-Z)!";
+          console.log("[info]signup.checkPasswordCorrect 3");
+          $scope.passwordIncorrect = 1;
+          return false;
+        }
+        if (password.length < 8) {
+          $scope.passwordIncorrectMessage = "Error: password must contain at least 8 character";
+          console.log("[info]signup.checkPasswordCorrect 0");
+          $scope.passwordIncorrect = 1;
+          return;
+        }
+        $scope.passwordIncorrectMessage = "";
+        $scope.passwordCorrect = 1;
+        console.log("[info]signup.checkPasswordCorrect 4");
+        return true;
+    };
+
+    $scope.displayPasswordMessage = function() {
+        console.log("[func]signup.displayPasswordMessage");
+        $scope.passwordErrorMessage = $scope.passwordIncorrectMessage;
+    }
+ 
     $scope.register = function() {
 
 /*
@@ -118,8 +163,8 @@ myModule.controller('signupCtrl', [
 
 
     $scope.getUserAgent = function () {
-        console.log(navigator.userAgent);
-        console.log(window.navigator.userAgent);
+        //console.log(navigator.userAgent);
+        //console.log(window.navigator.userAgent);
         var _ua = (function(u){
           var mobile = {
                     0: (u.indexOf("windows") != -1 && u.indexOf("phone") != -1)
@@ -178,8 +223,6 @@ myModule.controller('signupCtrl', [
           //var mobile = document.getElementById('mobile');
           //mobile.innerHTML = searchMobile;
           $scope.userMobile = searchMobile(_ua);
-          console.log("$scope.userDevice = searchMobile;");
-          console.log(searchMobile);
 
 
         }
